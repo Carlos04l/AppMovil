@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Usuario | QAS México</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #1e3c72, #2a5298);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+        .form-container {
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            width: 380px;
+        }
+        h1 {
+            text-align: center;
+            color: #1e3c72;
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: 600;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        button {
+            width: 100%;
+            background-color: #1e3c72;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #2a5298;
+        }
+        .message {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .link {
+            text-align: center;
+            margin-top: 15px;
+        }
+        a {
+            text-decoration: none;
+            color: #1e3c72;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .terms {
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .terms input {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Crear cuenta</h1>
+
+        <form method="POST" onsubmit="return validarTerminos();">
+            {{ form.hidden_tag() }}
+
+            <label for="username">Usuario:</label>
+            {{ form.username(size=32, required=True) }}
+
+            <label for="email">Correo electrónico:</label>
+            {{ form.email(size=32, required=True) }}
+
+            <label for="password">Contraseña:</label>
+            {{ form.password(size=32, required=True) }}
+
+            <label for="role">Rol:</label>
+            {{ form.role() }}
+
+            <div class="terms">
+                <input type="checkbox" id="acepto" required>
+                <label for="acepto">
+                    Acepto los <a href="{{ url_for('terminos') }}" target="_blank">Términos y Condiciones</a> y el
+                    <a href="{{ url_for('privacidad') }}" target="_blank">Aviso de Privacidad</a>.
+                </label>
+            </div>
+
+            {{ form.submit(class_="btn btn-primary") }}
+        </form>
+
+        <div class="link">
+            <a href="{{ url_for('login') }}">🔑 ¿Ya tienes cuenta? Inicia sesión</a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="message">
+                {% for category, message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <script>
+        function validarTerminos() {
+            const check = document.getElementById("acepto");
+            if (!check.checked) {
+                alert("Debes aceptar los Términos y Condiciones y el Aviso de Privacidad para registrarte.");
+                return false;
+            }
+            return true;
+        }
+    </script>
+</body>
+</html>
